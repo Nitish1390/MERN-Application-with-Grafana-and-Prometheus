@@ -1,36 +1,39 @@
 This project outlines an advanced monitoring solution for a MERN (MongoDB, Express.js, React, Node.js) application. It employs Grafana for visualization, Prometheus for metrics collection, along with log aggregation and distributed tracing tools to provide a full observability stack.
-## Contributing
+
 
 
 
 
 1. MERN Application Setup
 
-+ Prerequisites
+Prerequisites
 
-Node.js and npm
-MongoDB
-Git
-Steps
+	Node.js and npm
+	MongoDB
+	Git
 
-+ Clone the travel memory application repository:
++ Steps
 
-git clone <repository_url>
-cd <repository_name>
-Install dependencies for both backend and frontend:
+1.Clone the travel memory application repository:
+
+	git clone <repository_url>
+	cd <repository_name>
+
+2. Install dependencies for both backend and frontend:
 
 + Install backend dependencies
----------npm install
+  ----->npm install
 
 + Navigate to the frontend directory
-----------cd frontend
+	----->cd frontend
 
 + Install frontend dependencies
----------------->npm install
-Start the backend and frontend servers:
+	------>npm install
+
++ Start the backend and frontend servers:
 
 +  Start the backend server
--------------->npm start
+------->npm start
 
 + In a new terminal, start the frontend server
 ------------------>cd frontend
@@ -44,34 +47,34 @@ Start the backend and frontend servers:
 
 + Add custom metrics to your backend. Example for API response times:
 
-const { Histogram } = require('prom-client');
+		{
+  		"dashboard": {
+    	"title": "API Metrics",
+    	"panels": [
+      {
+        "title": "Response Times",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          { "expr": "histogram_quantile(0.95, sum(rate(response_times_bucket[5m])) by (le))" }
+        ]
+       }
+    	]
+   	  }
+			}
 
-const responseTimes = new Histogram({
-  name: 'response_times',
-  help: 'Response times in ms',
-  buckets: [0.1, 5, 15, 50, 100, 500]
-});
++ MongoDB Monitoring
 
-app.use((req, res, next) => {
-  const start = process.hrtime();
-  res.on('finish', () => {
-    const diff = process.hrtime(start);
-    const responseTimeInMs = diff[0] * 1e3 + diff[1] * 1e-6;
-    responseTimes.observe(responseTimeInMs);
-  });
-  next();
-});
-
-MongoDB Monitoring
 Set up MongoDB Exporter to track database performance. Follow the MongoDB Exporter setup instructions.
 
 3. Enhancing Grafana Dashboards
-Import default dashboards for Node.js and MongoDB from Grafana's dashboard repository.
+
++ Import default dashboards for Node.js and MongoDB from Grafana's dashboard repository.
 
 Create custom dashboards for your application. Example JSON configuration for a custom dashboard:
 
-{
-  "dashboard": {
+	{
+  	"dashboard": {
     "title": "API Metrics",
     "panels": [
       {
@@ -82,51 +85,71 @@ Create custom dashboards for your application. Example JSON configuration for a 
           { "expr": "histogram_quantile(0.95, sum(rate(response_times_bucket[5m])) by (le))" }
         ]
       }
-    ]
-  }
-}
-
+    	]
+  	}
+	}
 
 
 4. Log Aggregation
-Choosing a Log Aggregator
-Options include Loki, ELK Stack, and Fluentd. For this project, we'll use Loki due to its tight integration with Grafana.
-Setup
-Install Loki and Promtail. Follow the Loki installation guide.
 
-Configure Promtail to tail logs from your application and send them to Loki.
++ Choosing a Log Aggregator
 
-In Grafana, add Loki as a datasource and create dashboards to visualize your logs.
+> Options include Loki, ELK Stack, and Fluentd. For this project, we'll use Loki due to its tight integration with Grafana.
+
++ Setup
+
+1.Install Loki and Promtail. Follow the Loki installation guide.
+
+2. Configure Promtail to tail logs from your application and send them to Loki.
+
+3.In Grafana, add Loki as a datasource and create dashboards to visualize your logs.
 
 
 5. Implementing Distributed Tracing
-Choose a tracing tool (e.g., Jaeger or Zipkin) and integrate it into your application. For Jaeger:
 
-npm install jaeger-client
-Configure tracing in your application. Example for initializing a Jaeger tracer:
++ Choose a tracing tool (e.g., Jaeger or Zipkin) and integrate it into your application. For Jaeger:
 
-const initJaegerTracer = require("jaeger-client").initTracer;
+		>npm install jaeger-client
 
-function initTracer(serviceName) {
-  const config = {
-    serviceName: serviceName,
-    sampler: { type: "const", param: 1 },
-    reporter: { logSpans: true },
-  };
-  const options = {
-    logger: {
-      info(msg) { console.log("INFO ", msg); },
-      error(msg) { console.log("ERROR", msg); }
-    },
-  };
-  return initJaegerTracer(config, options);
-}
++ Configure tracing in your application. Example for initializing a Jaeger tracer:
 
-const tracer = initTracer("my-service-name");
-Add tracing to key operations in your application.
+		const initJaegerTracer = require("jaeger-client").initTracer;
+
+		function initTracer(serviceName) {
+    	const config = {
+        serviceName: serviceName,
+        sampler: {
+            type: "const",
+            param: 1
+        },
+        reporter: {
+            logSpans: true
+        },
+    	};
+
+  		const options = {
+        logger: {
+            info(msg) {
+                console.log("INFO ", msg);
+            },
+            error(msg) {
+                console.log("ERROR", msg);
+            }
+        },
+    	};
+
+    	return initJaegerTracer(config, options);
+		}
+
+		const tracer = initTracer("my-service-name");
+
+
+ > Add tracing to key operations in your application.
 
 
 6. Alerting and Anomaly Detection
+
+
 + Configuring Alerting Rules in Grafana Based on Metrics Thresholds
 
 + Grafana offers robust alerting capabilities that allow you to set up notifications based on specific metrics thresholds. Here’s how to configure alerting rules:
