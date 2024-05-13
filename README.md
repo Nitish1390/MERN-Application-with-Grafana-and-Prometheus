@@ -1,11 +1,8 @@
 This project outlines an advanced monitoring solution for a MERN (MongoDB, Express.js, React, Node.js) application. It employs Grafana for visualization, Prometheus for metrics collection, along with log aggregation and distributed tracing tools to provide a full observability stack.
 ## Contributing
 
-Contributions are always welcome!
 
-See `contributing.md` for ways to get started.
 
-Please adhere to this project's `code of conduct`.
 
 1. MERN Application Setup
 
@@ -15,26 +12,27 @@ Node.js and npm
 MongoDB
 Git
 Steps
+
 Clone the travel memory application repository:
 
 git clone <repository_url>
 cd <repository_name>
 Install dependencies for both backend and frontend:
 
-# Install backend dependencies
+> Install backend dependencies
 npm install
 
-# Navigate to the frontend directory
+> Navigate to the frontend directory
 cd frontend
 
-# Install frontend dependencies
+> Install frontend dependencies
 npm install
 Start the backend and frontend servers:
 
-# Start the backend server
+> Start the backend server
 npm start
 
-# In a new terminal, start the frontend server
+> In a new terminal, start the frontend server
 cd frontend
 npm start
 
@@ -45,7 +43,7 @@ Install the Prometheus client for Node.js:
 npm install prom-client
 
 
-# Add custom metrics to your backend. Example for API response times:
+> Add custom metrics to your backend. Example for API response times:
 
 const { Histogram } = require('prom-client');
 
