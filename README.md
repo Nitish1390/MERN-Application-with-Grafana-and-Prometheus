@@ -19,28 +19,28 @@ git clone <repository_url>
 cd <repository_name>
 Install dependencies for both backend and frontend:
 
-> Install backend dependencies
-npm install
++ Install backend dependencies
+---------npm install
 
-> Navigate to the frontend directory
-cd frontend
++ Navigate to the frontend directory
+----------cd frontend
 
-> Install frontend dependencies
-npm install
++ Install frontend dependencies
+---------------->npm install
 Start the backend and frontend servers:
 
 > Start the backend server
-npm start
+-------------->npm start
 
-> In a new terminal, start the frontend server
-cd frontend
-npm start
+++In a new terminal, start the frontend server
+------------------>cd frontend
+------------------>npm start
 
 2. Integrating Prometheus
-Backend Metrics
-Install the Prometheus client for Node.js:
+++Backend Metrics
+------------------>Install the Prometheus client for Node.js:
 
-npm install prom-client
+------------------>npm install prom-client
 
 
 > Add custom metrics to your backend. Example for API response times:
