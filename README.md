@@ -67,7 +67,42 @@ Prerequisites
 
 Set up MongoDB Exporter to track database performance. Follow the MongoDB Exporter setup instructions.
 
-3. Enhancing Grafana Dashboards
+3. Integrate Prometheus:
+
++ Integrate Prometheus metrics into the Node.js backend. Use client libraries to expose custom metrics like API response times, request counts, and error rates.
++ Set up MongoDB monitoring using an exporter, such as MongoDB Exporter, to track database performance.
+
++ Add the following content to the prometheus.service file:
+
+		[Unit]
+		Description=Prometheus
+		Wants=network-online.target
+		After=network-online.target
+
+		StartLimitIntervalSec=500
+		StartLimitBurst=5
+
+		[Service]
+		User=prometheus
+		Group=prometheus
+		Type=simple
+		Restart=on-failure
+		RestartSec=5s
+		ExecStart=/usr/local/bin/prometheus \
+  		--config.file=/etc/prometheus/prometheus.yml \
+  		--storage.tsdb.path=/data \
+  		--web.console.templates=/etc/prometheus/consoles \
+  		--web.console.libraries=/etc/prometheus/console_libraries \
+  		--web.listen-address=0.0.0.0:9090 \
+  		--web.enable-lifecycle
+
+		[Install]
+		WantedBy=multi-user.target
+
+  ![image](https://github.com/Nitish1390/MERN-Application-with-Grafana-and-Prometheus/assets/139607834/54c14a60-1e1b-4d58-9f87-ea4dcb640fb1)
+
+
+4. Enhancing Grafana Dashboards
 
 + Import default dashboards for Node.js and MongoDB from Grafana's dashboard repository.
 
@@ -90,7 +125,7 @@ Create custom dashboards for your application. Example JSON configuration for a 
 	}
 
 
-4. Log Aggregation
+5. Log Aggregation
 
 + Choosing a Log Aggregator
 
@@ -105,7 +140,7 @@ Create custom dashboards for your application. Example JSON configuration for a 
 3.In Grafana, add Loki as a datasource and create dashboards to visualize your logs.
 
 
-5. Implementing Distributed Tracing
+6. Implementing Distributed Tracing
 
 + Choose a tracing tool (e.g., Jaeger or Zipkin) and integrate it into your application. For Jaeger:
 
@@ -147,7 +182,7 @@ Create custom dashboards for your application. Example JSON configuration for a 
  > Add tracing to key operations in your application.
 
 
-6. Alerting and Anomaly Detection
+7. Alerting and Anomaly Detection
 
 
 + Configuring Alerting Rules in Grafana Based on Metrics Thresholds
@@ -174,7 +209,7 @@ Create custom dashboards for your application. Example JSON configuration for a 
 
 
 
-7. Documentation and Analysis
+8. Documentation and Analysis
 Documenting the Setup Process, Challenges Encountered, and Solutions
 
 + A comprehensive documentation process involves the following steps:
@@ -202,6 +237,3 @@ Documenting the Setup Process, Challenges Encountered, and Solutions
 
 
 
-8. Bonus (Optional)
-+ Implement auto-scaling based on specific metrics.
-+ Explore service mesh integration for advanced observability features.
